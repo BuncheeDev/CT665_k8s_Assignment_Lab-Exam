@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "2539a15c-2f3a-42a1-bf28-b6d0821d4006",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\BuncheeDev\\Documents\\Virtual Machines\\CT665_k8s_Assignment_Lab-Exam\\.archify\\architecture-lab-exam\\candidate.json",
+  "output": "C:\\Users\\BuncheeDev\\Documents\\Virtual Machines\\CT665_k8s_Assignment_Lab-Exam\\docs\\architecture.html",
+  "specification": {
+    "sha256": "ff3e837d2e2e9bbfbde691c01ba8198534a1f4d215136d2ac3e7241568eb7013",
+    "bytes": 3935
+  },
+  "artifact": {
+    "sha256": "2bd2ffa618bd3f43cb3300761b8c056b726915461138187918ebaa081e054e6c",
+    "bytes": 847539
+  }
+}

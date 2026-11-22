@@ -1,0 +1,67 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: iam-712-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: www.iam-712.com
+      http:
+        paths:
+          - path: /research
+            pathType: Prefix
+            backend:
+              service:
+                name: app-research
+                port:
+                  number: 80
+          - path: /api-712
+            pathType: Prefix
+            backend:
+              service:
+                name: api-712
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: portal-712
+                port:
+                  number: 80
+    - host: www.id-712.com
+      http:
+        paths:
+          - path: /research
+            pathType: Prefix
+            backend:
+              service:
+                name: app-research
+                port:
+                  number: 80
+          - path: /api-712
+            pathType: Prefix
+            backend:
+              service:
+                name: api-712
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: portal-712
+                port:
+                  number: 80
+    - host: admin.iam-712.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: admin-712
+                port:
+                  number: 80

@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "CT665 Lab Exam: 3-Node Kubernetes Web Architecture",
+    "output": "docs/architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "browser",
+      "type": "external",
+      "label": "Web Browser",
+      "sublabel": "/etc/hosts -> 192.168.1.30",
+      "pos": [40, 220],
+      "size": [155, 62]
+    },
+    {
+      "id": "ingress",
+      "type": "security",
+      "label": "NGINX Ingress",
+      "sublabel": "id-712-ingress (:80)",
+      "pos": [290, 220],
+      "size": [160, 62]
+    },
+    {
+      "id": "portal",
+      "type": "frontend",
+      "label": "portal-712",
+      "sublabel": "www.iam-712.com /",
+      "pos": [555, 55],
+      "size": [155, 62]
+    },
+    {
+      "id": "research",
+      "type": "backend",
+      "label": "app-research",
+      "sublabel": "/research (300-500w)",
+      "pos": [555, 165],
+      "size": [155, 62]
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "api-712",
+      "sublabel": "/api-712/<message>",
+      "pos": [555, 275],
+      "size": [155, 62]
+    },
+    {
+      "id": "admin",
+      "type": "frontend",
+      "label": "admin-712",
+      "sublabel": "admin.iam-712.com",
+      "pos": [555, 385],
+      "size": [155, 62]
+    },
+    {
+      "id": "configmap",
+      "type": "database",
+      "label": "ConfigMap Store",
+      "sublabel": "lab-exam-content",
+      "pos": [835, 165],
+      "size": [165, 62]
+    },
+    {
+      "id": "k8s_nodes",
+      "type": "cloud",
+      "label": "3-Node K8s Cluster",
+      "sublabel": "minikube + m02 + m03",
+      "pos": [835, 510],
+      "size": [165, 62]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Kubernetes 3-Node Cluster (v1.35.1)",
+      "wraps": ["ingress", "portal", "research", "api", "admin", "configmap", "k8s_nodes"],
+      "pad": 22
+    },
+    {
+      "kind": "security-group",
+      "label": "default namespace (Microservices & Shared State)",
+      "wraps": ["portal", "research", "api", "admin", "configmap"],
+      "pad": 14
+    }
+  ],
+  "connections": [
+    { "from": "browser", "to": "ingress", "label": "HTTP :80", "variant": "emphasis" },
+    { "from": "ingress", "to": "portal", "label": "Host /", "variant": "emphasis" },
+    { "from": "ingress", "to": "research", "label": "/research", "variant": "default" },
+    { "from": "ingress", "to": "api", "label": "/api-712/*", "variant": "default" },
+    { "from": "ingress", "to": "admin", "label": "admin host", "variant": "security" },
+    { "from": "portal", "to": "configmap", "label": "read JSON", "variant": "dashed" },
+    { "from": "research", "to": "configmap", "label": "read JSON", "variant": "dashed" },
+    { "from": "admin", "to": "configmap", "label": "RBAC patch", "variant": "security" },
+    { "from": "k8s_nodes", "to": "configmap", "label": "schedules pods", "variant": "dashed" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Ingress Routing Rules",
+      "items": [
+        "www.iam-712.com / -> portal-712 (photo, name, ID 68130712)",
+        "www.iam-712.com/research -> app-research (Neural of Law summary)",
+        "www.iam-712.com/api-712/<msg> -> api-712 (centered big display)",
+        "admin.iam-712.com -> admin-712 (edit portal & research)"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "3-Node Cluster Topology",
+      "items": [
+        "Control-plane node: minikube",
+        "Worker nodes: minikube-m02 and minikube-m03",
+        "Images distributed across all 3 nodes via minikube image load"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Cross-Node State Persistence",
+      "items": [
+        "Shared state lives in Kubernetes ConfigMap lab-exam-content",
+        "admin-712 uses ServiceAccount lab-exam-admin-sa with RBAC Role",
+        "Updates made on any node appear immediately on portal & research"
+      ]
+    }
+  ]
+}

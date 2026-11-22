@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\BuncheeDev\\Documents\\Virtual Machines\\CT665_k8s_Assignment_Lab-Exam\\.archify\\architecture-lab-exam\\candidate.json",
+    "sha256": "ff3e837d2e2e9bbfbde691c01ba8198534a1f4d215136d2ac3e7241568eb7013",
+    "bytes": 3935
+  },
+  "artifact": {
+    "path": "C:\\Users\\BuncheeDev\\Documents\\Virtual Machines\\CT665_k8s_Assignment_Lab-Exam\\docs\\architecture.html",
+    "sha256": "2bd2ffa618bd3f43cb3300761b8c056b726915461138187918ebaa081e054e6c",
+    "bytes": 847539
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\BuncheeDev\\Documents\\Virtual Machines\\CT665_k8s_Assignment_Lab-Exam\\docs\\architecture.finalize.json",
+    "summaryReceipt": "C:\\Users\\BuncheeDev\\Documents\\Virtual Machines\\CT665_k8s_Assignment_Lab-Exam\\docs\\architecture.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\BuncheeDev\\Documents\\Virtual Machines\\CT665_k8s_Assignment_Lab-Exam\\docs\\architecture.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-22T03:35:24.079Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 7278,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}
