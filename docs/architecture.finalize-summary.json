@@ -7,13 +7,13 @@
   "quality": "showcase",
   "specification": {
     "path": "C:\\Users\\BuncheeDev\\Documents\\Virtual Machines\\CT665_k8s_Assignment_Lab-Exam\\.archify\\architecture-lab-exam\\candidate.json",
-    "sha256": "8393efbbf1a31459f77fceadb9da4023ee372dc37b34af1ce7da594d55bc60f0",
-    "bytes": 3534
+    "sha256": "7c42b4c3dfb8e123b350dc059b49bcef9813e7b7783139d34eb500dd0649fbcf",
+    "bytes": 6114
   },
   "artifact": {
     "path": "C:\\Users\\BuncheeDev\\Documents\\Virtual Machines\\CT665_k8s_Assignment_Lab-Exam\\docs\\architecture.html",
-    "sha256": "c4fbc0f68122146280e365f0a30a44c36888c3f926b49cef801e301b4b458866",
-    "bytes": 844385
+    "sha256": "c9665de692254aa08a0c0fd9b5d5f9891ff35f58381a34b439c2d240a6de0702",
+    "bytes": 854437
   },
   "gates": {
     "validate": "pass",
@@ -43,7 +43,7 @@
     "noticeText": null
   },
   "visualReview": "not-requested",
-  "durationMs": 7600,
+  "durationMs": 7326,
   "browserCheck": {
     "requested": true,
     "ran": true
@@ -51,7 +51,7 @@
   "visualReviewRecommendation": {
     "action": "inspect-route-readability",
     "signals": {
-      "resolvedCrossovers": 1,
+      "resolvedCrossovers": 5,
       "routesOverSuggestedBends": 1
     },
     "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
@@ -59,22 +59,104 @@
       "crossings": [
         {
           "left": {
-            "from": "node1_ingress",
-            "to": "node3_pods",
-            "label": "Flannel CNI",
-            "collectionIndex": 3,
-            "artifactIndex": 4
+            "from": "vm_host",
+            "to": "node1_ingress",
+            "label": "DNAT :80",
+            "collectionIndex": 1,
+            "artifactIndex": 2
           },
           "right": {
-            "from": "node2_pods",
+            "from": "portal_svc",
             "to": "node1_cm",
             "label": "GET JSON",
+            "collectionIndex": 6,
+            "artifactIndex": 7
+          },
+          "point": [
+            491,
+            246
+          ]
+        },
+        {
+          "left": {
+            "from": "node1_ingress",
+            "to": "portal_svc",
+            "label": "Host /",
+            "collectionIndex": 2,
+            "artifactIndex": 3
+          },
+          "right": {
+            "from": "portal_svc",
+            "to": "node1_cm",
+            "label": "GET JSON",
+            "collectionIndex": 6,
+            "artifactIndex": 7
+          },
+          "point": [
+            602.5000000000001,
+            98
+          ],
+          "sharedNode": "portal_svc"
+        },
+        {
+          "left": {
+            "from": "node1_ingress",
+            "to": "api_svc",
+            "label": "/api-712/*",
             "collectionIndex": 4,
             "artifactIndex": 5
           },
+          "right": {
+            "from": "node1_ingress",
+            "to": "admin_svc",
+            "label": "admin host",
+            "collectionIndex": 5,
+            "artifactIndex": 6
+          },
           "point": [
-            631.2222222222222,
-            160
+            667.25,
+            301
+          ],
+          "sharedNode": "node1_ingress"
+        },
+        {
+          "left": {
+            "from": "node1_ingress",
+            "to": "api_svc",
+            "label": "/api-712/*",
+            "collectionIndex": 4,
+            "artifactIndex": 5
+          },
+          "right": {
+            "from": "research_svc",
+            "to": "node1_cm",
+            "label": "GET JSON",
+            "collectionIndex": 7,
+            "artifactIndex": 8
+          },
+          "point": [
+            776,
+            301
+          ]
+        },
+        {
+          "left": {
+            "from": "node1_ingress",
+            "to": "admin_svc",
+            "label": "admin host",
+            "collectionIndex": 5,
+            "artifactIndex": 6
+          },
+          "right": {
+            "from": "research_svc",
+            "to": "node1_cm",
+            "label": "GET JSON",
+            "collectionIndex": 7,
+            "artifactIndex": 8
+          },
+          "point": [
+            776,
+            351
           ]
         }
       ],
@@ -82,20 +164,25 @@
         {
           "relationship": {
             "from": "node1_ingress",
-            "to": "node3_pods",
-            "label": "Flannel CNI",
-            "collectionIndex": 3,
-            "artifactIndex": 4
+            "to": "admin_svc",
+            "label": "admin host",
+            "collectionIndex": 5,
+            "artifactIndex": 6
           },
-          "bends": 3,
-          "stretch": 1
+          "bends": 5,
+          "stretch": 1.217
         }
       ],
       "truncated": false
     },
     "hints": [
-      "node1_ingress → node3_pods crosses node2_pods → node1_cm: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
-      "node1_ingress → node3_pods needs 3 bends: move node node1_ingress or node3_pods so they share a row or column with matching centers, or sit diagonally with a clear corner."
+      "node1_ingress has 4 relationships facing its right side, which fits 3 ports: make that side at least 74px, or move some of those neighbours so they face another side of node1_ingress.",
+      "vm_host → node1_ingress crosses portal_svc → node1_cm: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "node1_ingress → portal_svc and portal_svc → node1_cm cross next to portal_svc: move node node1_ingress or node1_cm so the two reach portal_svc from different sides (for example one level with it, one directly above or below it).",
+      "node1_ingress → api_svc and node1_ingress → admin_svc cross next to node1_ingress: move node api_svc or admin_svc so the two reach node1_ingress from different sides (for example one level with it, one directly above or below it).",
+      "node1_ingress → api_svc crosses research_svc → node1_cm: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "node1_ingress → admin_svc crosses research_svc → node1_cm: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "node1_ingress → admin_svc needs 5 bends: move node node1_ingress or admin_svc so they share a row or column with matching centers, or sit diagonally with a clear corner."
     ],
     "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
   }

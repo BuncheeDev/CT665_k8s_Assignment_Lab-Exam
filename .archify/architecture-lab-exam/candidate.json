@@ -2,9 +2,14 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "CT665 Lab Exam: Physical & 3-Node Kubernetes Web Architecture",
+    "title": "CT665 Lab Exam: Code-to-Kubernetes 3-Node Architecture",
     "output": "docs/architecture.html",
-    "quality_profile": "showcase"
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/BuncheeDev/CT665_k8s_Assignment_Lab-Exam.git",
+      "provider": "github",
+      "revision": "0da991635126d67db531508d1c9341f19e6de9f9"
+    }
   },
   "components": [
     {
@@ -12,105 +17,142 @@
       "type": "external",
       "label": "Windows Host Browser",
       "sublabel": "VMnet8 NAT (192.168.1.1)",
-      "pos": [40, 225],
-      "size": [170, 64]
+      "pos": [35, 230],
+      "size": [165, 62]
     },
     {
       "id": "vm_host",
       "type": "cloud",
       "label": "Ubuntu Linux VM",
-      "sublabel": "192.168.1.30 / iptables :80",
-      "pos": [280, 225],
-      "size": [175, 64]
+      "sublabel": "/etc/hosts + iptables :80",
+      "sources": [{ "path": "deploy.sh", "line": 34, "end_line": 37, "label": "update /etc/hosts" }],
+      "pos": [265, 230],
+      "size": [165, 62]
     },
     {
       "id": "node1_ingress",
       "type": "security",
-      "label": "Node 1: Ingress",
-      "sublabel": "minikube (192.168.58.2)",
+      "label": "Node 1: NGINX Ingress",
+      "sublabel": "iam-712-ingress (:80)",
       "tag": "Node 1",
-      "pos": [540, 75],
-      "size": [180, 64]
+      "sources": [{ "path": "k8s/ingress.yaml", "line": 1, "end_line": 67, "label": "Ingress routing rules" }],
+      "pos": [515, 110],
+      "size": [175, 62]
     },
     {
       "id": "node1_cm",
       "type": "database",
       "label": "Node 1: K8s API + CM",
-      "sublabel": "lab-exam-content",
+      "sublabel": "lab-exam-content + RBAC",
       "tag": "Node 1",
-      "pos": [540, 175],
-      "size": [180, 64]
+      "sources": [{ "path": "k8s/rbac-configmap.yaml", "line": 1, "end_line": 57, "label": "SA + Role + ConfigMap" }],
+      "pos": [515, 355],
+      "size": [175, 62]
     },
     {
-      "id": "node2_pods",
-      "type": "backend",
-      "label": "Node 2: Worker Pods",
-      "sublabel": "portal + research + api",
-      "tag": "Node 2",
-      "pos": [810, 75],
-      "size": [185, 64]
-    },
-    {
-      "id": "node3_pods",
+      "id": "portal_svc",
       "type": "frontend",
-      "label": "Node 3: Worker Pods",
-      "sublabel": "portal + research + api + admin",
+      "label": "portal-712 (Node 2/3)",
+      "sublabel": "PortalHandler + load_portal_data()",
+      "tag": "Node 2/3",
+      "sources": [
+        { "path": "portal-712/app.py", "line": 25, "end_line": 44, "label": "load_portal_data()" },
+        { "path": "portal-712/app.py", "line": 248, "end_line": 285, "label": "PortalHandler.do_GET()" },
+        { "path": "k8s/portal-712.yaml", "line": 1, "end_line": 46, "label": "Deployment + Service" }
+      ],
+      "pos": [800, 60],
+      "size": [205, 62]
+    },
+    {
+      "id": "research_svc",
+      "type": "backend",
+      "label": "app-research (Node 2/3)",
+      "sublabel": "ResearchHandler + load_research_data()",
+      "tag": "Node 2/3",
+      "sources": [
+        { "path": "app-research/app.py", "line": 34, "end_line": 53, "label": "load_research_data()" },
+        { "path": "app-research/app.py", "line": 140, "end_line": 160, "label": "ResearchHandler.do_GET()" },
+        { "path": "k8s/app-research.yaml", "line": 1, "end_line": 46, "label": "Deployment + Service" }
+      ],
+      "pos": [800, 165],
+      "size": [205, 62]
+    },
+    {
+      "id": "api_svc",
+      "type": "backend",
+      "label": "api-712 (Node 2/3)",
+      "sublabel": "ApiHandler.do_GET() /api-712/",
+      "tag": "Node 2/3",
+      "sources": [
+        { "path": "api-712/app.py", "line": 88, "end_line": 115, "label": "ApiHandler.do_GET()" },
+        { "path": "k8s/api-712.yaml", "line": 1, "end_line": 45, "label": "Deployment + Service" }
+      ],
+      "pos": [800, 270],
+      "size": [205, 62]
+    },
+    {
+      "id": "admin_svc",
+      "type": "frontend",
+      "label": "admin-712 (Node 3)",
+      "sublabel": "AdminHandler + k8s_patch_cm()",
       "tag": "Node 3",
-      "pos": [810, 250],
-      "size": [195, 64]
+      "sources": [
+        { "path": "admin-712/app.py", "line": 32, "end_line": 77, "label": "k8s_get_cm / k8s_patch_cm" },
+        { "path": "admin-712/app.py", "line": 309, "end_line": 330, "label": "AdminHandler.do_POST()" },
+        { "path": "k8s/admin-712.yaml", "line": 1, "end_line": 46, "label": "Deployment + Service" }
+      ],
+      "pos": [800, 375],
+      "size": [205, 62]
     }
   ],
   "boundaries": [
     {
       "kind": "region",
-      "label": "Physical VM: Ubuntu 20.04 (192.168.1.30) · Docker Driver",
-      "wraps": ["vm_host", "node1_ingress", "node1_cm", "node2_pods", "node3_pods"],
-      "pad": 24
+      "label": "Physical VM: Ubuntu Linux · Docker Driver (Minikube 3-Node)",
+      "wraps": ["vm_host", "node1_ingress", "node1_cm", "portal_svc", "research_svc", "api_svc", "admin_svc"],
+      "pad": 22
     },
     {
       "kind": "security-group",
-      "label": "Node 1 · minikube (Control-Plane 192.168.58.2)",
+      "label": "Node 1 · minikube (Control-Plane)",
       "wraps": ["node1_ingress", "node1_cm"],
       "pad": 14
     },
     {
       "kind": "security-group",
-      "label": "Node 2 · minikube-m02 (Worker 192.168.58.3)",
-      "wraps": ["node2_pods"],
-      "pad": 14
-    },
-    {
-      "kind": "security-group",
-      "label": "Node 3 · minikube-m03 (Worker 192.168.58.4)",
-      "wraps": ["node3_pods"],
+      "label": "Node 2 & Node 3 · minikube-m02 / m03 (Workers)",
+      "wraps": ["portal_svc", "research_svc", "api_svc", "admin_svc"],
       "pad": 14
     }
   ],
   "connections": [
     { "from": "win_browser", "to": "vm_host", "label": "HTTP :80", "variant": "emphasis" },
     { "from": "vm_host", "to": "node1_ingress", "label": "DNAT :80", "variant": "emphasis" },
-    { "from": "node1_ingress", "to": "node2_pods", "label": "Flannel CNI", "variant": "default" },
-    { "from": "node1_ingress", "to": "node3_pods", "label": "Flannel CNI", "variant": "default" },
-    { "from": "node2_pods", "to": "node1_cm", "label": "GET JSON", "variant": "dashed" },
-    { "from": "node3_pods", "to": "node1_cm", "label": "RBAC PATCH", "variant": "security" }
+    { "from": "node1_ingress", "to": "portal_svc", "label": "Host /", "variant": "emphasis" },
+    { "from": "node1_ingress", "to": "research_svc", "label": "/research", "variant": "default" },
+    { "from": "node1_ingress", "to": "api_svc", "label": "/api-712/*", "variant": "default" },
+    { "from": "node1_ingress", "to": "admin_svc", "label": "admin host", "variant": "security" },
+    { "from": "portal_svc", "to": "node1_cm", "label": "GET JSON", "variant": "dashed" },
+    { "from": "research_svc", "to": "node1_cm", "label": "GET JSON", "variant": "dashed" },
+    { "from": "admin_svc", "to": "node1_cm", "label": "PATCH RBAC", "variant": "security" }
   ],
   "cards": [
     {
       "dot": "emerald",
-      "title": "Physical & Network Layer",
+      "title": "Code-Level Kubernetes Integration",
       "items": [
-        "Windows Host (192.168.1.1) -> Ubuntu VM (192.168.1.30) via VMnet8 NAT",
-        "Ubuntu VM iptables DNAT forwards :80 to Minikube Node 1 (192.168.58.2)",
-        "Flannel CNI (10.244.0.0/16) routes pod traffic across Node 1, Node 2, and Node 3"
+        "portal-712/app.py & app-research/app.py call K8s API (GET lab-exam-content) using ServiceAccount token",
+        "admin-712/app.py handles POST /api/save/* and calls k8s_patch_cm() (strategic-merge-patch+json)",
+        "api-712/app.py parses /api-712/<msg> via urllib.parse.unquote() and renders centered Hero UI"
       ]
     },
     {
       "dot": "cyan",
-      "title": "3-Node Pod Placement",
+      "title": "Physical & 3-Node Topology",
       "items": [
-        "Node 1 (minikube): Control-Plane, NGINX Ingress, ConfigMap lab-exam-content",
-        "Node 2 (minikube-m02): portal-712, app-research, api-712",
-        "Node 3 (minikube-m03): portal-712, app-research, api-712, admin-712"
+        "Node 1 (minikube): Control-Plane, NGINX Ingress Controller, K8s API + ConfigMap",
+        "Node 2 (minikube-m02) & Node 3 (minikube-m03): Worker nodes running replicated Python pods",
+        "Click any node in Archify to inspect its exact source file & line numbers on GitHub"
       ]
     }
   ]
