@@ -7,13 +7,13 @@
   "quality": "showcase",
   "specification": {
     "path": "C:\\Users\\BuncheeDev\\Documents\\Virtual Machines\\CT665_k8s_Assignment_Lab-Exam\\.archify\\architecture-lab-exam\\candidate.json",
-    "sha256": "ff3e837d2e2e9bbfbde691c01ba8198534a1f4d215136d2ac3e7241568eb7013",
-    "bytes": 3935
+    "sha256": "8393efbbf1a31459f77fceadb9da4023ee372dc37b34af1ce7da594d55bc60f0",
+    "bytes": 3534
   },
   "artifact": {
     "path": "C:\\Users\\BuncheeDev\\Documents\\Virtual Machines\\CT665_k8s_Assignment_Lab-Exam\\docs\\architecture.html",
-    "sha256": "2bd2ffa618bd3f43cb3300761b8c056b726915461138187918ebaa081e054e6c",
-    "bytes": 847539
+    "sha256": "c4fbc0f68122146280e365f0a30a44c36888c3f926b49cef801e301b4b458866",
+    "bytes": 844385
   },
   "gates": {
     "validate": "pass",
@@ -43,9 +43,60 @@
     "noticeText": null
   },
   "visualReview": "not-requested",
-  "durationMs": 7278,
+  "durationMs": 7600,
   "browserCheck": {
     "requested": true,
     "ran": true
+  },
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "resolvedCrossovers": 1,
+      "routesOverSuggestedBends": 1
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [
+        {
+          "left": {
+            "from": "node1_ingress",
+            "to": "node3_pods",
+            "label": "Flannel CNI",
+            "collectionIndex": 3,
+            "artifactIndex": 4
+          },
+          "right": {
+            "from": "node2_pods",
+            "to": "node1_cm",
+            "label": "GET JSON",
+            "collectionIndex": 4,
+            "artifactIndex": 5
+          },
+          "point": [
+            631.2222222222222,
+            160
+          ]
+        }
+      ],
+      "detours": [
+        {
+          "relationship": {
+            "from": "node1_ingress",
+            "to": "node3_pods",
+            "label": "Flannel CNI",
+            "collectionIndex": 3,
+            "artifactIndex": 4
+          },
+          "bends": 3,
+          "stretch": 1
+        }
+      ],
+      "truncated": false
+    },
+    "hints": [
+      "node1_ingress → node3_pods crosses node2_pods → node1_cm: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "node1_ingress → node3_pods needs 3 bends: move node node1_ingress or node3_pods so they share a row or column with matching centers, or sit diagonally with a clear corner."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
   }
 }
